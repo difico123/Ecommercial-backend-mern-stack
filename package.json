@@ -1,0 +1,21 @@
+{
+    "name": "ecomercial-mern",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon server.js",
+        "beautiful": "prettier --single-quote --trailing-comma all --tab-width 4 --write **/*.{js,json,scss} "
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "morgan": "^1.10.0",
+        "prettier": "^2.3.2"
+    }
+}
