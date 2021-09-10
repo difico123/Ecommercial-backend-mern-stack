@@ -1,11 +1,14 @@
 const express = require('express');
 const morgan = require('morgan'); // log http request
 const cors = require('cors');
+const db = require('./config/db/db.js');
 
 require('dotenv').config({
     path: './config/environment/index.env',
 });
 
+//MongoDB
+db.connect();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -14,11 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(cors());
 
-app.get('/', function (req, res) {
-    res.json({
-        heeo: 'sdfa',
-    });
-});
+app.use('/api/user/', require('./routes/auth.route'));
 
 app.use((req, res) => {
     res.status(404).json({
