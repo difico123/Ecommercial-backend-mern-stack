@@ -17,7 +17,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(cors());
 
-app.use('/api/user/', require('./routes/auth.route'));
+app.use('/api/user', require('./routes/auth.route'));
+app.use('/api/category', require('./routes/category.route'));
 
 app.use((req, res) => {
     res.status(404).json({

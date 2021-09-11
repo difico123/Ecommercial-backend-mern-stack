@@ -3,13 +3,12 @@ const { validationResult } = require('express-validator');
 const gravatar = require('gravatar'); // get user image by email
 const jwt = require('jsonwebtoken'); // to generate token
 const bcrypt = require('bcryptjs'); // encrypt password
-const joi = require('joi')
+const joi = require('joi');
 
 module.exports = class ApiUser {
-    
-// @route   POST api/user/register
-// @desc    Register user
-// @access  Public
+    // @route   POST api/user/register
+    // @desc    Register user
+    // @access  Public
     static async resgister(req, res) {
         console.log(req.body);
         const errors = validationResult(req);
@@ -23,18 +22,14 @@ module.exports = class ApiUser {
 
         try {
             // Check if user already exist
-            let user = await User.findOne({
+            let hasUser = await User.findOne({
                 email,
             });
 
             // If user exist
-            if (user) {
+            if (hasUser) {
                 return res.status(400).json({
-                    errors: [
-                        {
-                            msg: 'User already exists',
-                        },
-                    ],
+                    msg: 'User already exists',
                 });
             }
 
@@ -47,7 +42,7 @@ module.exports = class ApiUser {
             });
 
             // create user object
-            user = new User({
+            let user = new User({
                 name,
                 email,
                 avatar,
@@ -58,7 +53,7 @@ module.exports = class ApiUser {
             const salt = await bcrypt.genSalt(10); // generate salt contains 10
             // save password
             user.password = await bcrypt.hash(password, salt); // use user password and salt to hash password
-            //save user in databasw
+            //save user in database
             await user.save();
 
             // payload to generate token
@@ -87,5 +82,74 @@ module.exports = class ApiUser {
         }
     }
 
-    
+    // @route   POST api/user/login
+    // @desc    login user
+    // @access  Public
+    static async login(req, res) {
+        //if error
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array(),
+            });
+        }
+        // else everything is ok
+        const { email, password } = req.body;
+
+        try {
+            //find user
+            let user = await User.findOne({ email });
+            //if user not found in database
+            if (!user) {
+                return res.status(404).json({
+                    error: 'user not found',
+                });
+            }
+
+            //else Compare passwords
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(404).json({
+                    error: 'password is not correct',
+                });
+            }
+
+            //payload for jwt
+            const payload = {
+                user: {
+                    id: user.id,
+                },
+            };
+            jwt.sign(
+                payload,
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: 360000, // for development for production it will 3600
+                },
+                (err, token) => {
+                    if (err) throw err;
+                    res.json({
+                        token,
+                    });
+                },
+            );
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).send('Server error');
+        }
+    }
+
+    // @route   POST api/user
+    // @desc    User information
+    // @access  Private
+    static async getInfor(req, res) {
+        try {
+            //get user information by id
+            const user = await User.findById(req.user.id).select('-password');
+            res.json(user);
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).send('Server error');
+        }
+    }
 };
