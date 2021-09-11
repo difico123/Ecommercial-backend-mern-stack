@@ -14,7 +14,7 @@ module.exports = class ApiUser {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
-                errors: errors.array(),
+                errors: errors.errors.map(item => item.msg)
             });
         }
         // get name and email and password from request
