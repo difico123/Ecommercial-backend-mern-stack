@@ -16,7 +16,7 @@ router.post(
     ApiCategory.addCategory,
 );
 
-// @route   POST api/category/all
+// @route   GET api/category/all
 // @desc    Get all categories
 // @access  Public
 router.get('/all', ApiCategory.showAll);

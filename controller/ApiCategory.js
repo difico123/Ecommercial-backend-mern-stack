@@ -68,7 +68,10 @@ module.exports = class ApiCategory {
         }
 
         try {
-            let category = await Category.updateOne({  _id: req.params.id }, req.body);
+            let category = await Category.updateOne(
+                { _id: req.params.id },
+                req.body,
+            );
             res.status(200).send(`updated successfully!`);
         } catch (error) {
             res.status(404).send(
@@ -84,7 +87,9 @@ module.exports = class ApiCategory {
         let { id } = req.params;
         try {
             let deletedCategory = await Category.findByIdAndDelete(id);
-            res.status(200).send(`${deletedCategory.name} deleted successfully!`);
+            res.status(200).send(
+                `${deletedCategory.name} deleted successfully!`,
+            );
         } catch (error) {
             res.status(404).send(
                 'the category with the given ID was not found',

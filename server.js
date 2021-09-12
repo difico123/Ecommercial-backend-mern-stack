@@ -19,6 +19,7 @@ app.use(cors());
 
 app.use('/api/user', require('./routes/auth.route'));
 app.use('/api/category', require('./routes/category.route'));
+app.use('/api/product', require('./routes/product.route'));
 
 app.use((req, res) => {
     res.status(404).json({
