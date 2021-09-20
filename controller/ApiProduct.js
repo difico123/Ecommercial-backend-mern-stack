@@ -95,7 +95,7 @@ module.exports = class ApiProduct {
         try {
             let product = await Product.find()
                 .select('-photo')
-                .populate('category');
+                .populate('category','_id name');
             res.status(200).json({ product });
         } catch (error) {
             res.status(404).send('Server error');
@@ -206,7 +206,7 @@ module.exports = class ApiProduct {
         }
     }
 
-    // @route   Get api/product/:productId
+    // @route   Get api/product/related:productId
     // @desc    Get a list related to  product
     // @access  Public
     static async relatedList(req, res) {

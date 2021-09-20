@@ -42,7 +42,7 @@ module.exports = class ApiCategory {
     }
 
     // @route   POST api/category/:id
-    // @desc    get single categories
+    // @desc    Get single categories
     // @access  Public
     static async showSingle(req, res, next) {
         let { id } = req.params;

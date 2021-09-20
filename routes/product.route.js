@@ -11,11 +11,6 @@ const ApiProduct = require('../controller/ApiProduct');
 // @access Public
 router.get('/list', ApiProduct.list);
 
-// @route GET api/product/:productId
-// @desc Get a product
-// @access Public
-router.get('/:productId', productById, ApiProduct.getSingle);
-
 // @route GET api/product/photo/:productId
 // @desc Get a product
 // @access Public
@@ -26,15 +21,10 @@ router.get('/photo/:productId', productById, ApiProduct.getPhoto);
 // @access Private
 router.post('/', auth, authAdmin, ApiProduct.addProduct);
 
-// @route   Get api/product/categories
+// @route   GET api/product/categories
 // @desc    Get a list categories of products
 // @access  Public
 router.get('/categories', ApiProduct.listCategory);
-
-// @route GET api/product/
-// @desc Get all product
-// @access Public
-router.get('/', ApiProduct.getAll);
 
 // @route   Post api/product/filter
 // @desc    filter a Product by price and category
@@ -46,9 +36,19 @@ router.post('/filter', ApiProduct.filter);
 // @access  Public
 router.get('/search', ApiProduct.search);
 
-// @route   Get api/product/:productId
+// @route   Get api/product/related/:productId
 // @desc    Get a list related to  product
 // @access  Public
 router.get('/related/:productId', productById, ApiProduct.relatedList);
+
+// @route GET api/product/:productId
+// @desc Get a product
+// @access Public
+router.get('/:productId', productById, ApiProduct.getSingle);
+
+// @route GET api/product/
+// @desc Get all product
+// @access Public
+router.get('/', ApiProduct.getAll);
 
 module.exports = router;
